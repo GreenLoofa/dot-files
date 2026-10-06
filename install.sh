@@ -17,6 +17,7 @@ LINKS=(
   "starship/starship.toml:$HOME/.config/starship.toml"
   "herdr/config.toml:$HOME/.config/herdr/config.toml"
   "nvim:$HOME/.config/nvim"
+  "mise/config.toml:$HOME/.config/mise/config.toml"
 )
 
 # Files that shadow our configs and should be moved out of the way.
@@ -43,6 +44,9 @@ if [[ "${1:-}" == "--brew" ]]; then
     [[ -x $prefix/bin/brew ]] && { eval "$($prefix/bin/brew shellenv)"; break; }
   done
   brew bundle --file="$DOTFILES/Brewfile" || echo "brew bundle reported errors (often just apps installed outside brew)"
+  # mise: official installer (prebuilt; brew builds from source on Intel)
+  [[ -x "$HOME/.local/bin/mise" ]] || curl -fsSL https://mise.run | sh
+
   command -v herdr >/dev/null || [[ -x "$HOME/.local/bin/herdr" ]] || curl -fsSL https://herdr.dev/install.sh | sh
 
   # tree-sitter CLI (needed by nvim-treesitter). Prebuilt binary: brew builds it from source on Intel.
@@ -78,6 +82,9 @@ done
 # Use the repo's tracked git hooks (gitleaks secret scan on commit)
 git -C "$DOTFILES" config core.hooksPath .githooks
 echo "hooks   core.hooksPath -> .githooks"
+
+# Install global tool versions from mise/config.toml
+[[ -x "$HOME/.local/bin/mise" ]] && "$HOME/.local/bin/mise" install --yes
 
 [[ -d "$BACKUP" ]] && echo "Backups saved in $BACKUP"
 echo "Done. Open a new terminal to pick up changes."

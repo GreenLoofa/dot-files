@@ -41,24 +41,10 @@ path_prepend() {
 }
 path_prepend "$HOME/go/bin" "$HOME/.local/bin"
 
-# --- Language toolchains (each only if installed on this machine) ---
-if [[ -f "$HOMEBREW_PREFIX/opt/asdf/libexec/asdf.sh" ]]; then
-  . "$HOMEBREW_PREFIX/opt/asdf/libexec/asdf.sh"            # asdf < 0.16 (shell version)
-elif command -v asdf >/dev/null; then
-  path=("${ASDF_DATA_DIR:-$HOME/.asdf}/shims" $path)      # asdf >= 0.16 (Go rewrite)
-fi
-
-[[ -f "$HOME/.cargo/env" ]] && . "$HOME/.cargo/env"
-
-path_prepend "$HOME/.pyenv/bin"
-if command -v pyenv >/dev/null; then
-  eval "$(pyenv init -)"
-  command -v pyenv-virtualenv-init >/dev/null && eval "$(pyenv virtualenv-init -)"
-fi
-
-export NVM_DIR="$HOME/.nvm"
-[[ -s "$NVM_DIR/nvm.sh" ]] && . "$NVM_DIR/nvm.sh"
-[[ -s "$NVM_DIR/bash_completion" ]] && . "$NVM_DIR/bash_completion"
+# --- Language toolchains ---
+# mise manages node, python, erlang, ... (global: ~/.config/mise/config.toml)
+command -v mise >/dev/null && eval "$(mise activate zsh)"
+[[ -f "$HOME/.cargo/env" ]] && . "$HOME/.cargo/env"   # rust via rustup
 
 # --- Apps ---
 [[ -d /Applications/calibre.app ]] && alias ebook-convert='/Applications/calibre.app/Contents/MacOS/ebook-convert'

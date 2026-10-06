@@ -1,0 +1,10 @@
+# mise global config — https://mise.jdx.dev/configuration.html
+# Projects pin their own versions with mise.toml, .tool-versions, .nvmrc or .python-version.
+
+[tools]
+node = "24"
+python = "3.11"
+
+[settings]
+# Also read .nvmrc / .node-version / .python-version (off by default in mise)
+idiomatic_version_file_enable_tools = ["node", "python"]
