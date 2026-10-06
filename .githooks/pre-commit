@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# Block commits that contain secrets (API keys, tokens, private keys, ...).
+# Bypass for a known false positive: add it to .gitleaksignore (preferred) or `git commit --no-verify`.
+set -euo pipefail
+
+if ! command -v gitleaks >/dev/null; then
+  echo "pre-commit: gitleaks not installed (brew install gitleaks). Refusing to commit unscanned." >&2
+  exit 1
+fi
+
+gitleaks git --pre-commit --staged --redact --no-banner --verbose

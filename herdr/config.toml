@@ -1,0 +1,20 @@
+# herdr config — https://herdr.dev/docs/configuration/
+# Full defaults: herdr --default-config
+
+onboarding = false
+
+# No built-in OneNord: start from nord and override with the OneNord palette.
+[theme]
+name = "nord"
+
+[theme.custom]
+panel_bg = "#2E3440"
+sidebar_bg = "#2E3440"
+active_row_bg = "#3B4252"
+selection_bg = "#4C566A"
+text = "#C8D0E0"
+accent = "#88C0D0"
+green = "#A3BE8C"
+blue = "#81A1C1"
+red = "#D57780"
+yellow = "#EBCB8B"

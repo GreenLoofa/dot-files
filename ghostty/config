@@ -1,0 +1,33 @@
+# Ghostty config — https://ghostty.org/docs/config
+# Preview themes live:  ghostty +list-themes
+
+# --- Theme ---
+theme = Onenord
+
+# --- Font ---
+font-family = JetBrainsMono Nerd Font
+font-size = 14
+# Disable ligatures (e.g. != -> ≠) by uncommenting:
+# font-feature = -calt
+
+# --- Window ---
+window-padding-x = 10
+window-padding-y = 8
+window-padding-balance = true
+macos-titlebar-style = tabs
+background-opacity = 1.0
+
+# --- Behaviour ---
+cursor-style = block
+cursor-color = #BF616A
+cursor-text = #2E3440
+cursor-style-blink = false
+mouse-hide-while-typing = true
+copy-on-select = clipboard
+shell-integration-features = no-cursor,sudo,title
+# Let Option act as Alt (needed for alt+ keybindings in nvim/herdr)
+macos-option-as-alt = true
+
+# --- Keybindings ---
+# Option+Backspace deletes the previous word (sends ESC+DEL, i.e. Alt+Backspace)
+keybind = alt+backspace=text:\x1b\x7f

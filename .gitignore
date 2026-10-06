@@ -1,0 +1,9 @@
+.DS_Store
+
+# Machine-specific / private overrides — never commit
+*.local
+.env
+.env.*
+
+# Runtime files that may land next to linked configs
+*.log
