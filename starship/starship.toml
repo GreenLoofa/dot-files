@@ -45,6 +45,7 @@ style = "purple"
 format = "[took](snow_dim) [$duration]($style) "
 
 [character]
+format = "$symbol  "  # two spaces of padding after the play button
 success_symbol = "[\uf04b](bold red)"  # play icon
 error_symbol = "[\uf04b](bold red)"
 vimcmd_symbol = "[\uf04a](bold green)"  # reverse icon (vi command mode)
