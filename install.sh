@@ -34,10 +34,14 @@ backup() {
 }
 
 if [[ "${1:-}" == "--brew" ]]; then
-  command -v brew >/dev/null || {
+  command -v brew >/dev/null || [[ -x /opt/homebrew/bin/brew ]] || {
     echo "Installing Homebrew..."
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   }
+  # Fresh Apple Silicon installs aren't on PATH yet (/opt/homebrew/bin)
+  for prefix in /opt/homebrew /usr/local; do
+    [[ -x $prefix/bin/brew ]] && { eval "$($prefix/bin/brew shellenv)"; break; }
+  done
   brew bundle --file="$DOTFILES/Brewfile" || echo "brew bundle reported errors (often just apps installed outside brew)"
   command -v herdr >/dev/null || [[ -x "$HOME/.local/bin/herdr" ]] || curl -fsSL https://herdr.dev/install.sh | sh
 

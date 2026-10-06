@@ -22,15 +22,36 @@ export EDITOR=nvim
 export VISUAL=nvim
 alias vim=nvim
 
-# --- PATH ---
-export PATH="$HOME/.local/bin:$HOME/go/bin:$PATH"
+# --- Homebrew (Apple Silicon: /opt/homebrew, Intel: /usr/local) ---
+# .zprofile does this for login shells; repeat here for non-login shells.
+if [[ -z "$HOMEBREW_PREFIX" ]]; then
+  for prefix in /opt/homebrew /usr/local; do
+    [[ -x $prefix/bin/brew ]] && { eval "$($prefix/bin/brew shellenv)"; break; }
+  done
+  unset prefix
+fi
 
-# --- Language toolchains (only if installed on this machine) ---
-[[ -f /usr/local/opt/asdf/libexec/asdf.sh ]] && . /usr/local/opt/asdf/libexec/asdf.sh
+# --- PATH ---
+typeset -U path   # zsh array tied to $PATH; -U drops duplicates
+
+# Prepend each directory that exists on this machine (last argument ends up first)
+path_prepend() {
+  local dir
+  for dir in "$@"; do [[ -d $dir ]] && path=("$dir" $path); done
+}
+path_prepend "$HOME/go/bin" "$HOME/.local/bin"
+
+# --- Language toolchains (each only if installed on this machine) ---
+if [[ -f "$HOMEBREW_PREFIX/opt/asdf/libexec/asdf.sh" ]]; then
+  . "$HOMEBREW_PREFIX/opt/asdf/libexec/asdf.sh"            # asdf < 0.16 (shell version)
+elif command -v asdf >/dev/null; then
+  path=("${ASDF_DATA_DIR:-$HOME/.asdf}/shims" $path)      # asdf >= 0.16 (Go rewrite)
+fi
+
 [[ -f "$HOME/.cargo/env" ]] && . "$HOME/.cargo/env"
 
-if [[ -d "$HOME/.pyenv" ]]; then
-  export PATH="$HOME/.pyenv/bin:$PATH"
+path_prepend "$HOME/.pyenv/bin"
+if command -v pyenv >/dev/null; then
   eval "$(pyenv init -)"
   command -v pyenv-virtualenv-init >/dev/null && eval "$(pyenv virtualenv-init -)"
 fi
@@ -44,19 +65,22 @@ export NVM_DIR="$HOME/.nvm"
 [[ "$TERM_PROGRAM" == "kiro" ]] && . "$(kiro --locate-shell-integration-path zsh)"
 
 # --- Plugins (installed via Brewfile) ---
-BREW_PREFIX="${HOMEBREW_PREFIX:-$(brew --prefix 2>/dev/null)}"
-[[ -f "$BREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ]] &&
-  . "$BREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
+[[ -f "$HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ]] &&
+  . "$HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
 
-# --- Machine-specific overrides (not tracked) ---
+# --- Per-machine config ---
+# Tracked in the repo:  zsh/hosts/<hostname>.zsh   (hostname: `hostname -s`)
+# Untracked, private:   ~/.zshrc.local
+DOTFILES_ZSH="${${(%):-%x}:A:h}"   # this file's real directory (follows the symlink)
+[[ -f "$DOTFILES_ZSH/hosts/$(hostname -s).zsh" ]] && . "$DOTFILES_ZSH/hosts/$(hostname -s).zsh"
 [[ -f ~/.zshrc.local ]] && . ~/.zshrc.local
 
 # --- Prompt ---
 command -v starship >/dev/null && eval "$(starship init zsh)"
 
 # Must be sourced last
-[[ -f "$BREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]] &&
-  . "$BREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+[[ -f "$HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]] &&
+  . "$HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 
 # Keep the command word in the normal text color (no red/green while typing)
 for style in unknown-token command builtin alias suffix-alias global-alias function \
