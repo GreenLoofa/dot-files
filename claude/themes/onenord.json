@@ -1,0 +1,8 @@
+{
+  "name": "OneNord",
+  "base": "dark-ansi",
+  "overrides": {
+    "promptBorder": "#BF616A",
+    "promptBorderShimmer": "#D57780"
+  }
+}

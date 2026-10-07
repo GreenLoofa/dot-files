@@ -18,6 +18,7 @@ LINKS=(
   "herdr/config.toml:$HOME/.config/herdr/config.toml"
   "nvim:$HOME/.config/nvim"
   "mise/config.toml:$HOME/.config/mise/config.toml"
+  "claude/themes/onenord.json:$HOME/.claude/themes/onenord.json"
 )
 
 # Files that shadow our configs and should be moved out of the way.
