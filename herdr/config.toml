@@ -18,3 +18,26 @@ green = "#A3BE8C"
 blue = "#81A1C1"
 red = "#D57780"
 yellow = "#EBCB8B"
+
+# --- Keybindings: tmux-style (prefix = ctrl+b, herdr's default) ---
+[keys]
+prefix = "ctrl+b"
+
+# Panes
+split_horizontal = "prefix+\""          # tmux ":  split top/bottom
+split_vertical = "prefix+%"             # tmux %:  split left/right
+zoom = "prefix+z"                       # toggle fullscreen for the focused pane
+close_pane = "prefix+x"
+focus_pane_left = "prefix+h"
+focus_pane_down = "prefix+j"
+focus_pane_up = "prefix+k"
+focus_pane_right = "prefix+l"
+last_pane = "prefix+semicolon"          # tmux ;: jump back to the previous pane
+
+# Tabs (the tab bar along the top)
+new_tab = "prefix+c"
+next_tab = "prefix+n"
+previous_tab = "prefix+p"
+switch_tab = ["prefix+1..9", "alt+1..9"] # alt+N jumps straight to tab N, no prefix
+rename_tab = "prefix+comma"
+close_tab = "prefix+ampersand"
